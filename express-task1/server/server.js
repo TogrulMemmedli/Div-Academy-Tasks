@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const logSystem = require("./middleware/logSystem");
 const router = require("./routes/router");
-let ejs = require("ejs");
+const ejs = require("ejs");
 const { default: axios } = require("axios");
 const mockUrl =
   process.env.MOCK_API_URL ||
@@ -18,12 +18,17 @@ app.use(logSystem);
 app.use("/api/clubs", router);
 
 app.set("view engine", "ejs");
+
 app.get("/clubs", async (req, res) => {
   const response = await axios.get(`${mockUrl}`);
   const clubs = response.data;
   res.render("clubs", {
     clubs: clubs,
   });
+});
+
+app.get("/", (req, res) => {
+  res.render("home");
 });
 
 const port = process.env.PORT || 5000;
