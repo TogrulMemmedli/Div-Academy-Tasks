@@ -13,6 +13,10 @@ app.use(express.json());
 app.use(cors());
 require("dotenv").config();
 
+app.use(logSystem);
+
+app.use("/api/clubs", router);
+
 app.set("view engine", "ejs");
 app.get("/clubs", async (req, res) => {
   const response = await axios.get(`${mockUrl}`);
@@ -24,10 +28,6 @@ app.get("/clubs", async (req, res) => {
 
 const port = process.env.PORT || 5000;
 const host = process.env.HOST || "localhost";
-
-app.use(logSystem);
-
-app.use("/api/clubs", router);
 
 app.listen(port, () => {
   console.log(`Server is running on http://${host}:${port}/`);

@@ -1,4 +1,4 @@
-const { axios } = require("axios");
+const { default: axios } = require("axios");
 const dotenv = require("dotenv").config();
 const mockUrl =
   process.env.MOCK_API_URL ||
@@ -6,7 +6,9 @@ const mockUrl =
 
 const getAllClubs = async (req, res) => {
   try {
-    const response = await axios.get(`${mockUrl}`);
+    const response = await axios.get(
+      "https://66798d8318a459f639506e8f.mockapi.io/api/Clubs"
+    );
     const clubs = response.data;
     res.status(200).json({ clubs });
   } catch (error) {
@@ -78,7 +80,7 @@ const updateClub = async (req, res) => {
       return res.status(400).send({ msg: "Player Count field missed" });
     }
 
-    const response = await axios.put(`${mockUrl}${id}`, {
+    const response = await axios.put(`${mockUrl}/${id}`, {
       title: title,
       logo: logo,
       player_count: player_count,
@@ -87,7 +89,7 @@ const updateClub = async (req, res) => {
     if (response.status === 400) {
       return res
         .status(400)
-        .json({ msg: "There is not any data matches with this id" });
+        .json({ msg: "There is not any data matches with this id 400" });
     }
 
     res.status(200).json({
@@ -95,10 +97,11 @@ const updateClub = async (req, res) => {
       status: "success",
     });
   } catch (error) {
-    if (error.response && error.response.status === 400) {
+    console.log(error.response.status)
+    if (error.response && error.response.status === 404) {
       res
-        .status(400)
-        .json({ msg: "There is not any data matches with this id" });
+        .status(404)
+        .json({ msg: "There is not any data matches with this id 404" });
     } else {
       res.status(500).json({ msg: "500 Error" });
     }
